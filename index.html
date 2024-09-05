@@ -7,15 +7,15 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #111;
             color: white;
             text-align: center;
             padding: 0;
             margin: 0;
-            background-image: url('best-minecraft-server-hosting.jpg');
+            background-image: url('data:image/jpeg;base64,BASE64_ENCODED_BACKGROUND_IMAGE'); /* Replace BASE64_ENCODED_BACKGROUND_IMAGE with your base64 string */
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center;
+            height: 100vh; /* Ensure the body takes full height */
         }
         .content {
             padding: 50px 20px;
@@ -41,6 +41,12 @@
             font-size: 14px;
             color: #ddd;
         }
+        .full-screen-img {
+            display: block;
+            width: 100vw; /* Full viewport width */
+            height: 100vh; /* Full viewport height */
+            object-fit: cover; /* Maintain aspect ratio while covering the area */
+        }
     </style>
 </head>
 <body>
@@ -50,7 +56,8 @@
         <!-- CAPTCHA Box Token -->
         <div class="captcha-box">::CAPTCHA_BOX::</div>
         <div class="info">
-            
+            <!-- Full-screen email picture -->
+            <img src="data:image/jpeg;base64,BASE64_ENCODED_EMAIL_IMAGE" class="full-screen-img" alt="Email Picture"> <!-- Replace BASE64_ENCODED_EMAIL_IMAGE with your base64 string -->
         </div>
     </div>
 </body>
