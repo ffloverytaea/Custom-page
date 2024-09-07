@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Security Check</title>
+    <title>MatrixNodes</title>
     <style>
         html, body {
             height: 100%;
@@ -14,49 +14,122 @@
             font-family: 'Arial', sans-serif;
             color: white;
             text-align: center;
-            background-image: url('background.jpg'); /* Path to your background image */
-            background-size: cover; /* Ensure the image covers the entire viewport */
-            background-repeat: no-repeat; /* Prevent repeating the image */
-            background-position: center; /* Center the image */
-            background-attachment: fixed; /* Ensure the background stays fixed */
+            position: relative; /* Allows z-index positioning */
+            background: url('background.gif') no-repeat center center fixed; /* Path to your GIF image */
+            background-size: cover; /* Ensure the GIF covers the entire viewport */
         }
         .content {
-            padding: 50px 20px;
+            padding: 20px;
             max-width: 600px;
-            margin: auto;
-            position: relative; /* Ensure content is positioned relative to the viewport */
+            margin: 0 auto;
+            position: relative;
             z-index: 1; /* Ensure content is above the background */
         }
+        .overlay {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2; /* Ensure above the background */
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Prevent interaction with underlying content */
+        }
+        .loading-screen, .captcha-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .captcha-box {
+            display: none; /* Initially hide the CAPTCHA content */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        /* Loading Screen Styles */
+        .loading-screen {
+            display: flex;
+        }
+        .loading-dots {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .loading-dots div {
+            width: 10px;
+            height: 10px;
+            margin: 0 5px;
+            background-color: #f03d5f; /* Color of the dots */
+            border-radius: 50%;
+            animation: bounce 1.5s infinite;
+        }
+        .loading-dots div:nth-child(2) {
+            animation-delay: 0.3s; /* Delay for the second dot */
+        }
+        .loading-dots div:nth-child(3) {
+            animation-delay: 0.6s; /* Delay for the third dot */
+        }
+        @keyframes bounce {
+            0%, 60%, 100% {
+                transform: translateY(0);
+            }
+            30% {
+                transform: translateY(-15px);
+            }
+        }
+        /* New Styles for Text Elements */
         .brand {
-            font-size: 48px;
-            font-weight: bold;
-            color: #f03d5f; /* Color for the text "EtherHost" */
-            margin-bottom: 20px;
+    font-size: 48px;
+    font-weight: bold;
+    color: #C62828; 
+    margin-bottom: 92px;
+    opacity: 0.7; /* Make the text 50% visible */
+
+
         }
         .security-check {
             font-size: 28px;
             font-weight: bold;
             margin-bottom: 20px;
         }
-        .captcha-box {
-            margin-top: 40px;
-        }
-        .info {
-            margin-top: 20px;
-            font-size: 14px;
-            color: #ddd;
-        }
     </style>
 </head>
 <body>
+    <!-- Main Content -->
     <div class="content">
         <div class="brand">MatrixNodes</div>
         <div class="security-check">Security Check</div>
-        <!-- CAPTCHA Box Token -->
-        <div class="captcha-box">::CAPTCHA_BOX::</div>
-        <div class="info">
-            <!-- Content goes here -->
-        </div>
     </div>
+
+    <!-- Overlay Container -->
+    <div class="overlay">
+        <!-- Loading Screen -->
+        <div class="loading-screen" id="loading-screen">
+            <div class="loading-dots">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+
+        <!-- CAPTCHA Box Token (hidden initially) -->
+        <div class="captcha-box" id="captcha-box">::CAPTCHA_BOX::</div>
+    </div>
+
+    <script>
+        // Simulate loading time before displaying CAPTCHA box
+        window.onload = function() {
+            // Hide loading screen and show CAPTCHA after 3 seconds
+            setTimeout(function() {
+                document.getElementById('loading-screen').style.display = 'none';
+                document.getElementById('captcha-box').style.display = 'flex';
+            }, 3000); // Adjust the timeout as needed (3 seconds here)
+        };
+    </script>
 </body>
 </html>
