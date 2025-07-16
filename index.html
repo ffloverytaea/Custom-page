@@ -1,40 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>World Bot Invite</title>
   <style>
-    body {
+    * {
       margin: 0;
       padding: 0;
-      font-family: 'Arial', sans-serif;
-      background: url('lol.gif') no-repeat center center fixed;
-      background-size: cover;
-      color: white;
-      text-align: center;
+      box-sizing: border-box;
     }
 
-    .container {
+    body {
+      font-family: Arial, sans-serif;
+      color: #fff;
+      text-align: center;
+      background: url('lol.gif') no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
       display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.6); /* Dark overlay */
+      align-items: center;
+      flex-direction: column;
+      padding: 20px;
     }
 
     h1 {
       font-size: 3rem;
-      text-transform: uppercase;
-      margin-bottom: 1rem;
-      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+      margin-bottom: 15px;
+      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);
     }
 
     p {
-      font-size: 1.2rem;
-      margin-bottom: 2rem;
       max-width: 800px;
+      font-size: 1.2rem;
+      margin-bottom: 25px;
       line-height: 1.6;
       text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
     }
@@ -43,13 +51,12 @@
       display: inline-block;
       padding: 15px 30px;
       font-size: 1.2rem;
-      color: white;
+      color: #fff;
       background: #007bff;
-      border: none;
-      border-radius: 5px;
+      border-radius: 6px;
       text-decoration: none;
-      transition: background 0.3s;
-      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+      transition: background 0.3s ease;
+      font-weight: bold;
     }
 
     .button:hover {
@@ -57,9 +64,8 @@
     }
 
     .developer-info {
-      margin-top: 2rem;
+      margin-top: 25px;
       font-size: 1rem;
-      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
     }
 
     .developer-info a {
@@ -71,23 +77,43 @@
     .developer-info a:hover {
       text-decoration: underline;
     }
+
+    /* Mobile adjustments */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.2rem;
+      }
+
+      p {
+        font-size: 1rem;
+      }
+
+      .button {
+        font-size: 1rem;
+        padding: 12px 25px;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="overlay">
     <h1>World Bot [BETA]</h1>
     <p>
-      This Bot Is Designed To Stop Disruptive Behavior In Voice Channels. 
-      It Ensures A Better VC Experience By Giveing A World Tour To Abusive Users. 
-      Make Your Discord Server A Safer And More Enjoyable Place.
+      This bot is designed to prevent disruptive behavior in voice channels.
+      It ensures a better VC experience by giving a world tour to abusive users.
+      Make your Discord server a safer and more enjoyable place.
     </p>
-    <a href="https://discord.com/oauth2/authorize?client_id=1159546118808547399&permissions=10859279023184&integration_type=0&scope=bot" 
-       target="_blank" class="button">Invite</a>
+    <a
+      href="https://discord.com/oauth2/authorize?client_id=1159546118808547399&permissions=10859279023184&integration_type=0&scope=bot"
+      target="_blank"
+      class="button"
+      >Invite Bot</a
+    >
 
     <div class="developer-info">
       <p>Developed by <strong>FFLOVERYT</strong></p>
       <p>
-        Discord: <a href="https://discord.com/users/1125336814639648768">ffloveryt</a>
+        Discord: <a href="https://discord.com/users/1125336814639648768">ffloveryt</a> |
         Telegram: <a href="https://t.me/ffloveryt20">@ffloveryt20</a>
       </p>
     </div>
