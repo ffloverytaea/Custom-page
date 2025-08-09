@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rakhi Gift Maker</title>
+<style>
+html,body{
+  margin:0;
+  padding:0;
+  font-family:'Segoe UI', sans-serif;
+  background:#0a0a0a;
+  color:#fff;
+  height:100%;
+}
+#popup{
+  position:fixed;
+  inset:0;
+  background:linear-gradient(135deg,#1a1a1a,#000);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+#popup h1{
+  font-size:clamp(1.8rem, 6vw, 3rem);
+  background:linear-gradient(45deg,#FFD700,#FF8C00);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  text-align:center;
+  font-weight:bold;
+  padding:0 10px;
+}
+#popup button{
+  margin-top:20px;
+  padding:15px 30px;
+  font-size:clamp(1rem, 4vw, 1.4rem);
+  border:none;
+  border-radius:50px;
+  background:linear-gradient(45deg,#FFD700,#FF8C00);
+  color:#000;
+  font-weight:bold;
+  cursor:pointer;
+}
+#editor{
+  display:none;
+  flex-direction:column;
+  height:100%;
+}
+#photoArea{
+  flex:1;
+  position:relative;
+  background:#111;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+#uploadedImage{
+  max-width:100%;
+  max-height:100%;
+}
+.gift{
+  position:absolute;
+  width:60vw;
+  max-width:300px;
+  touch-action:none;
+  cursor:grab;
+  display:none;
+}
+.controls{
+  background:#1e1e1e;
+  padding:10px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  justify-content:center;
+  position:sticky;
+  bottom:0;
+}
+.controls button{
+  flex:1 1 45%;
+  padding:12px 8px;
+  font-size:clamp(0.9rem, 4vw, 1.2rem);
+  border:none;
+  border-radius:50px;
+  background:linear-gradient(45deg,#FF8C00,#FFD700);
+  color:#000;
+  font-weight:bold;
+  min-width:120px;
+}
+video{
+  max-width:100%;
+  height:auto;
+}
+#cameraOverlay{
+  position:fixed;
+  inset:0;
+  background:#000;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  z-index:10000;
+}
+#captureBtn{
+  margin-top:10px;
+  padding:15px 25px;
+  font-size:1.2rem;
+  background:linear-gradient(45deg,#FFD700,#FF8C00);
+  border:none;
+  border-radius:50px;
+  color:#000;
+  font-weight:bold;
+}
+</style>
+</head>
+<body>
+
+<!-- Greeting Popup -->
+<div id="popup">
+  <h1>🎉 Happy Rakshabandhan, Sister 💖</h1>
+  <button id="startBtn">🎁 Start</button>
+</div>
+
+<!-- Editor -->
+<div id="editor">
+  <div id="photoArea">
+    <img id="uploadedImage" alt="">
+    <img id="gift" class="gift" src="gift.png" draggable="false">
+  </div>
+  <div class="controls">
+    <button id="takePhotoBtn">📷 Take Photo</button>
+    <button id="uploadBtn">📁 Upload Photo</button>
+    <input type="file" id="fileInput" accept="image/*" style="display:none;">
+    <button id="downloadBtn">⬇️ Save PNG</button>
+  </div>
+</div>
+
+<!-- Camera Overlay -->
+<div id="cameraOverlay" style="display:none;">
+  <video id="cameraVideo" autoplay playsinline></video>
+  <button id="captureBtn">📸 Capture</button>
+</div>
+
+<script>
+const popup=document.getElementById("popup");
+const startBtn=document.getElementById("startBtn");
+const editor=document.getElementById("editor");
+const fileInput=document.getElementById("fileInput");
+const uploadedImage=document.getElementById("uploadedImage");
+const gift=document.getElementById("gift");
+const takePhotoBtn=document.getElementById("takePhotoBtn");
+const uploadBtn=document.getElementById("uploadBtn");
+const downloadBtn=document.getElementById("downloadBtn");
+const photoArea=document.getElementById("photoArea");
+const cameraOverlay=document.getElementById("cameraOverlay");
+const cameraVideo=document.getElementById("cameraVideo");
+const captureBtn=document.getElementById("captureBtn");
+
+startBtn.onclick=()=>{
+  popup.style.display="none";
+  editor.style.display="flex";
+};
+
+// Center gift in photo area
+function centerGift(){
+  const paRect=photoArea.getBoundingClientRect();
+  gift.style.left=(paRect.width/2 - gift.offsetWidth/2)+"px";
+  gift.style.top=(paRect.height/2 - gift.offsetHeight/2)+"px";
+}
+
+// Upload
+uploadBtn.onclick=()=>fileInput.click();
+fileInput.onchange=e=>{
+  const file=e.target.files[0];
+  if(file){
+    uploadedImage.src=URL.createObjectURL(file);
+    gift.style.display="block";
+    setTimeout(centerGift,100);
+  }
+};
+
+// Camera
+takePhotoBtn.onclick=async()=>{
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"}});
+    cameraVideo.srcObject=stream;
+    cameraOverlay.style.display="flex";
+  }catch(err){
+    alert("Camera access denied!");
+  }
+};
+
+captureBtn.onclick=()=>{
+  const canvas=document.createElement("canvas");
+  canvas.width=cameraVideo.videoWidth;
+  canvas.height=cameraVideo.videoHeight;
+  canvas.getContext("2d").drawImage(cameraVideo,0,0);
+  uploadedImage.src=canvas.toDataURL("image/png");
+  gift.style.display="block";
+  setTimeout(centerGift,100);
+  cameraVideo.srcObject.getTracks().forEach(track=>track.stop());
+  cameraOverlay.style.display="none";
+};
+
+// Drag + pinch resize gift
+let isDragging=false;
+gift.addEventListener("mousedown",startDrag);
+gift.addEventListener("touchstart",startDrag);
+
+function startDrag(e){
+  e.preventDefault();
+  isDragging=true;
+  document.addEventListener(e.type.includes("touch")?"touchmove":"mousemove",dragGift);
+  document.addEventListener(e.type.includes("touch")?"touchend":"mouseup",stopDrag);
+}
+function dragGift(e){
+  if(!isDragging) return;
+  if(e.touches && e.touches.length===2){
+    const dist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY);
+    gift.style.width=(dist/2)+"px";
+    return;
+  }
+  let x,y;
+  if(e.touches){
+    x=e.touches[0].clientX;
+    y=e.touches[0].clientY;
+  }else{
+    x=e.clientX;
+    y=e.clientY;
+  }
+  const paRect=photoArea.getBoundingClientRect();
+  gift.style.left=(x - paRect.left - gift.width/2)+"px";
+  gift.style.top=(y - paRect.top - gift.height/2)+"px";
+}
+function stopDrag(e){
+  isDragging=false;
+  document.removeEventListener("mousemove",dragGift);
+  document.removeEventListener("mouseup",stopDrag);
+  document.removeEventListener("touchmove",dragGift);
+  document.removeEventListener("touchend",stopDrag);
+}
+
+// Save PNG with gift
+downloadBtn.onclick=()=>{
+  const canvas=document.createElement("canvas");
+  canvas.width=photoArea.clientWidth;
+  canvas.height=photoArea.clientHeight;
+  const ctx=canvas.getContext("2d");
+
+  ctx.drawImage(uploadedImage,0,0,canvas.width,canvas.height);
+
+  const rect=gift.getBoundingClientRect();
+  const parentRect=photoArea.getBoundingClientRect();
+  const x=rect.left-parentRect.left;
+  const y=rect.top-parentRect.top;
+  ctx.drawImage(gift,x,y,gift.width,gift.height);
+
+  const a=document.createElement("a");
+  a.href=canvas.toDataURL("image/png");
+  a.download="with_gift.png";
+  a.click();
+};
+</script>
+
+</body>
+</html>
